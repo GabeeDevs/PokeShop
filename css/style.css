@@ -1,0 +1,113 @@
+/* Elimina os espaçamentos internos (padding) e externos(margin) do body */
+*{
+    margin: 0px;
+    padding: 0px;
+    /* Permite desativar o crescimento de uma caixa por conta do padding*/
+    box-sizing: border-box;
+}
+
+body{
+    background-image: url(../image/PokeFundo.png);
+}
+
+
+/* SEÇÃO DO HEADER */
+header {
+    width: 100%;
+    height: 800px;
+    background-image: url(../image/PokefundoTOP.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: 100%; /* Ajuste a porcentagem conforme necessário */
+    left: 100px;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 0px;
+}
+
+
+/* SEÇÃO DO MENU */
+#menu {
+    width: 100%;
+    height: 70px;
+    background-color: #1f1e1e;
+}
+
+/* SEÇÃO DO MAIN (CONTEÚDO) */
+main{
+    width: 70%;
+    background-color: #ffffff;
+    /*Configuração para deixar o elemento HTML crescendo conforme o seu conteúdo*/
+    min-height: 1000px; /*Altura minima*/
+    height: auto;       /*Altura automatica*/
+    overflow: hidden;   /*Desabilita a barra de rolagem da DIV*/
+
+    /* background-color: aquamarine; */
+
+    /* Permite centralizar qualquer objeto no navegador */
+    margin-left: auto;
+    margin-right: auto;
+
+    /* margin: 0 auto 0 auto; */
+}
+
+.section-titulo{
+    width: 100%;
+    height: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2em;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-left: 15px;
+    text-transform: uppercase;
+    
+}
+
+
+/* Compartilhar conteúdo de classe no CSS */
+
+
+
+.unidades-loja{
+    width: 35%;
+    background-color: aquamarine;
+}
+
+
+/* SEÇÃO DE PRODUTOS */
+#cardPokemon {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .caixa_produto {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    width: 150px;
+    background-color: #f8f8f8;
+  }
+  
+  .caixa_produto img {
+    width: 100px;
+    height: 100px;
+  }
+  
+
+
+.comprar:hover{
+    cursor: pointer;
+    background-color: rgb(67, 132, 3);
+    transition: 1s;
+}
+
+
+/* SEÇÃO DO FOOTER */
+footer{
+    width: 100%;
+    height: 50px;
+    background-color: #1f1e1e;
+}
