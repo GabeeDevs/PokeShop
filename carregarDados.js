@@ -5,14 +5,16 @@
  * Versão: 1.0
  ******************************************************************************/
 
-let allPokemonData = [];  // Armazena todos os Pokémon carregados para uso em pesquisa
+let allPokemonData = []; // Armazena os Pokémon carregados para exibir na página atual
+let currentPage = 1;     // Página atual
+const limit = 40;        // Quantidade de Pokémon por página
 
-// Função para limpar os cards de Pokémon
+
 const clearPokemonCards = () => {
     document.getElementById('cardPokemon').innerHTML = '';
 }
 
-// Função para criar um card para um Pokémon específico
+
 const setCreatePokemonCard = (dadosPokemon) => {
     let divCardPokemon = document.getElementById('cardPokemon');
 
@@ -51,20 +53,24 @@ const setCreatePokemonCard = (dadosPokemon) => {
     divCardPokemon.appendChild(divCaixaProduto);
 }
 
-// Função para carregar todos os Pokémon da API e exibir na página
-const getDadosPokemonAPI = async () => {
-    let url = 'https://pokeapi.co/api/v2/pokemon?limit=10000'; // Busca todos os Pokémon de uma vez porém com um limite de 10000
+
+const getDadosPokemonAPI = async (page) => {
+    clearPokemonCards();
+    allPokemonData = []; 
+    const offset = (page - 1) * limit;
+    const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
+
     try {
         let response = await fetch(url);
         let data = await response.json();
 
-        // Para cada Pokémon, busca os dados detalhados e armazena em allPokemonData
+        
         for (let item of data.results) {
             let pokemonResponse = await fetch(item.url);
             let pokemonData = await pokemonResponse.json();
-            allPokemonData.push(pokemonData); // Armazena cada Pokémon
+            allPokemonData.push(pokemonData); 
 
-            // Exibe o Pokémon na página
+        
             setCreatePokemonCard(pokemonData);
         }
     } catch (error) {
@@ -72,33 +78,58 @@ const getDadosPokemonAPI = async () => {
     }
 };
 
-// Função para buscar um Pokémon na lista carregada localmente
-const searchPokemon = () => {
+
+const searchPokemon = async () => {
     let query = document.getElementById('inputPesquisa').value.toLowerCase();
     if (query) {
         clearPokemonCards();
-        let filteredPokemon = allPokemonData.filter(pokemon => pokemon.name.toLowerCase().includes(query));
-        
-        if (filteredPokemon.length) {
-            filteredPokemon.forEach(pokemon => setCreatePokemonCard(pokemon));
-        } else {
-            alert("Pokémon não encontrado!");
+        try {
+            const url = `https://pokeapi.co/api/v2/pokemon/${query}`;
+            let response = await fetch(url);
+            
+           
+            if (response.ok) {
+                let pokemonData = await response.json();
+                setCreatePokemonCard(pokemonData); 
+            } else {
+                alert("Pokémon não encontrado!");
+            }
+        } catch (error) {
+            console.error("Erro ao buscar Pokémon:", error);
+            alert("Erro ao buscar Pokémon. Tente novamente.");
         }
     } else {
         alert("Digite o nome de um Pokémon para pesquisar.");
     }
 }
 
-// Função para limpar a pesquisa e exibir todos os Pokémon novamente
+
 const resetSearch = () => {
     document.getElementById('inputPesquisa').value = '';
     clearPokemonCards();
-    allPokemonData.forEach(pokemon => setCreatePokemonCard(pokemon));
+    getDadosPokemonAPI(currentPage); 
 }
 
-// Eventos para o botão de pesquisa e o botão de limpar
 document.getElementById('btnPesquisa').addEventListener('click', searchPokemon);
 document.getElementById('btnLimpar').addEventListener('click', resetSearch);
 
-// Carrega todos os Pokémon ao abrir a página
-window.addEventListener('load', getDadosPokemonAPI);
+
+const nextPage = () => {
+    currentPage++;
+    getDadosPokemonAPI(currentPage);
+};
+
+const previousPage = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        getDadosPokemonAPI(currentPage);
+    }
+};
+
+
+document.getElementById('btnPesquisa').addEventListener('click', searchPokemon);
+document.getElementById('btnLimpar').addEventListener('click', resetSearch);
+document.getElementById('btnNext').addEventListener('click', nextPage);
+document.getElementById('btnPrev').addEventListener('click', previousPage);
+
+window.addEventListener('load', () => getDadosPokemonAPI(currentPage));
