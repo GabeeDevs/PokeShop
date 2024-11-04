@@ -14,6 +14,30 @@ const clearPokemonCards = () => {
     document.getElementById('cardPokemon').innerHTML = '';
 }
 
+const tipoTraduzido = {
+    normal: "Normal",
+    fire: "Fogo",
+    water: "Água",
+    electric: "Elétrico",
+    grass: "Grama",
+    ice: "Gelo",
+    fighting: "Lutador",
+    poison: "Veneno",
+    ground: "Terra",
+    flying: "Voador",
+    psychic: "Psíquico",
+    bug: "Inseto",
+    rock: "Pedra",
+    ghost: "Fantasma",
+    dragon: "Dragão",
+    dark: "Noturno",
+    steel: "Aço",
+    fairy: "Fada"
+};
+
+function primeiraLetraMaiuscula(texto) {
+    return texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
+}
 
 const setCreatePokemonCard = (dadosPokemon) => {
     let divCardPokemon = document.getElementById('cardPokemon');
@@ -23,33 +47,44 @@ const setCreatePokemonCard = (dadosPokemon) => {
     let figureCaixaImagem = document.createElement('figure');
     let img = document.createElement('img');
     let pCaixaTexto = document.createElement('p');
+    let divTipoPokemon = document.createElement('div');
     let divComprar = document.createElement('div');
-
-    let textoTitulo = document.createTextNode(dadosPokemon.name);
+    let textoTitulo = document.createTextNode(primeiraLetraMaiuscula(dadosPokemon.name));
     let textoParagrafo = document.createTextNode(`ID: ${dadosPokemon.id}`);
     let textoComprar = document.createTextNode('Comprar');
+
+
+
+
+    let tipos = dadosPokemon.types
+    .map((tipo) => tipoTraduzido[tipo.type.name] || tipo.type.name).join(", ");
+    let textoTipo = document.createTextNode(`Tipo: ${tipos}`);
 
     divCaixaProduto.setAttribute('class', 'caixa_produto');
     h2CaixaTitulo.setAttribute('class', 'caixa_titulo');
     figureCaixaImagem.setAttribute('class', 'caixa_imagem');
+    divCaixaProduto.setAttribute('class', 'caixa_produto');
+    divTipoPokemon.setAttribute('class', 'caixa_tipo');
+
 
     img.setAttribute('src', dadosPokemon.sprites.versions['generation-v']['black-white']['animated'].front_default || dadosPokemon.sprites.front_default);
     img.setAttribute('alt', dadosPokemon.name);
     img.setAttribute('title', dadosPokemon.name);
-
     pCaixaTexto.setAttribute('class', 'caixa_texto');
     divComprar.setAttribute('class', 'comprar');
+
 
     h2CaixaTitulo.appendChild(textoTitulo);
     pCaixaTexto.appendChild(textoParagrafo);
     divComprar.appendChild(textoComprar);
     figureCaixaImagem.appendChild(img);
-
     divCaixaProduto.appendChild(h2CaixaTitulo);
     divCaixaProduto.appendChild(figureCaixaImagem);
     divCaixaProduto.appendChild(pCaixaTexto);
     divCaixaProduto.appendChild(divComprar);
-
+    divTipoPokemon.appendChild(textoTipo);
+    divCaixaProduto.appendChild(divTipoPokemon);
+    divCardPokemon.appendChild(divCaixaProduto);
     divCardPokemon.appendChild(divCaixaProduto);
 }
 
