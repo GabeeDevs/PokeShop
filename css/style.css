@@ -166,6 +166,7 @@ main {
 }
 .comprar:hover {
     background-color: rgb(67, 132, 3);
+    transform: scale(1.1)
 }
 
 
